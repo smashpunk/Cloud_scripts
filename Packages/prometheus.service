@@ -1,0 +1,11 @@
+[Unit]
+Description=prometheus
+
+[Service]
+User=root
+ExecStart=/opt/prometheus-1.4.1.linux-amd64/prometheus -config.file=/opt/prometheus-1.4.1.linux-amd64/prometheus.yml -storage.local.retention=2160h -storage.local.memory-chunks=2097152 -storage.local.series-file-shrink-ratio=0.3
+
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
