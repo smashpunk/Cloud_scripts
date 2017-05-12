@@ -1,0 +1,13 @@
+---
+- name: JDK initial
+  remote_user: root
+  hosts: all
+  tasks:
+  - name: copy jdk8 to target
+    copy:
+      src: /opt/WORK/Cloud_script/Packages/jdk-8u112-linux-x64.rpm
+      dest: /tmp/
+    when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+  - name: install jdk8 rpm
+    shell: rpm -Uvh /tmp/jdk-8u112-linux-x64.rpm
+    when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"

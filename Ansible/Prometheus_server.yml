@@ -1,0 +1,36 @@
+---
+ - name: reconfigure prometheus server
+   remote_user: root
+   hosts: prometheus
+   tasks:
+     - name: create remote prometheus destination folder
+       file:
+         path: /opt/prometheus.d/
+         state: directory
+         mode: 0755
+     - name: upload new job file
+       copy:
+         src: "/opt/WORK/Cloud_script/Ansible/prometheus_new_job"
+         dest: "/opt/prometheus.d/prometheus_new_job"
+     - name: copy current job file to destination folder
+       copy:
+         src: "/opt/prometheus-1.4.1.linux-amd64/prometheus.yml"
+         dest: "/opt/prometheus.d/"
+         remote_src: yes
+     - name: assemble new prometheus configuration file
+       assemble:
+         src: "/opt/prometheus.d/"
+         dest: "/opt/prometheus-1.4.1.linux-amd64/prometheus.yml"
+         backup: no
+     - name: reload prometheus configuration
+       shell: "kill -HUP `ps -ef | pgrep prometheus | grep -v grep`"
+       ## Prometheus is run directly by its script, /opt/prometheus-1.4.1.linux-amd64/prometheus -config.file=/opt/prometheus-1.4.1.linux-amd64/prometheus.yml -storage.local.retention=720h -storage.local.memory-chunks=2097152 -storage.local.series-file-shrink-ratio=0.3
+#       service:
+#         name: prometheus
+#         state: restarted
+     - name: clean remote prometheus destination folder
+       file:
+         path: /opt/prometheus.d/
+         state: absent
+     - name: clean local prometheus new job file
+       local_action: shell rm -f /opt/WORK/Cloud_script/Ansible/prometheus_new_job

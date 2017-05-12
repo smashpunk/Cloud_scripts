@@ -1,0 +1,29 @@
+---
+- name: init ECS OS after creating
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: disable ssh password login
+      replace:
+        dest: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication yes'
+        replace: 'PasswordAuthentication no'
+        backup: yes
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: modify /etc/sysctl.conf to control tcp TIME_WAIT
+      blockinfile:
+        dest: /etc/sysctl.conf
+        block: |
+          ## add tcp resue, recycle and fin timeout
+          net.ipv4.tcp_tw_reuse = 1
+          net.ipv4.tcp_tw_recycle = 1
+          net.ipv4.tcp_fin_timeout = 30
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: enable sysctl configuration
+      command: /sbin/sysctl -p
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: install screen pacakge
+      yum:
+        name: screen
+        state: present
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"

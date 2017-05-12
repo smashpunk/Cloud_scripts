@@ -1,0 +1,36 @@
+---
+- name: init ECS OS after creating
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: add customer ssh pub key
+      blockinfile:
+        dest: /root/.ssh/authorized_keys
+        block: |
+          ## Dong FuGui's key
+          ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAr90CFjrBvs4XzpM9St3s5rp3p62DFqH6dkkFo16Xzy0Dn1+OnAUx0uXD3JJjKvaBJmUwfR3v44b4GIybrhEqgsL3MGQKojnT5NuMqtwZqABUAEkdA9y2qWEuFk7DqzERnP/2l12zLW7Xoh6NNOMYWKusj6Q4+zffbqXO7UbZv97WmBLIRN9BAPKLPNkosVEiWGAVY8FNiJvRYalRhsckUOa9Eb/OhP/NIfQjC2K+okhnZJdWI2UKbztOGtGXwiBfqioKR9pdVMZEtiOmtr5o3lUxto1oCEOPz8Q/hNuLX/fWZj7TnhTqhyuelZX7OM/ZfaYfEfaQhHZW7Oni9+BMDQ==
+          ## Du JinCan's key
+          ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDiqjEcFUrGtcXFi8LjQmF/8WkElBakABw9vZ5ceXgolFmJVeBhM+qnkisqjNT+cjl1cnangMHOm8oIWqFn96u+ERiy78Kztq5LaTYQ5RG5wHXoipdllYvLGp/B0VxUy4RtsyoRErAuqqZNiNCGvNn6hNOrs0gTrZ3LkkEo5hpXs/gyDXuvjabte9eEh6CVpv6SbAJuPzb1IJwy8tYOhpnB8l0qhCSLWXt96iPz0suDYutrU/i380XoZLCwWmYPsvsVrR2/R8ji6N2uYteEdI8SVHFM07YNuy6B1QG2z30R4B2Dr9NLE7KkH1fieIgFPyNJosw7V0/51QXImQ6a8NB root@bogon
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: create log_track group
+      group:
+        name: log_track
+        state: present
+    - name: create log_tracker account
+      user:
+        name: log_tracker
+        shell: /bin/bash
+        group: log_track
+        createhome: yes
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: add log_tracker pub key
+      authorized_key:
+        user: log_tracker
+        state: present
+        key: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAxfTxU50KZVrcCzqfy/0dR4ba0FDwiiyIlwBrnAqCt08Rb3l3kJM5WQcSTk7QW46Q9YNNpgWxUwZ+Scn10Q8wOb30Q5e6YBjyrYn/BESGK3IiJIu447gzcPM2CHBGlXwIPvHnDo4j5QLlxXhaT90WT7iIDJ6FDecQjltZrx+cGbtd7rwbA1K0KAA5sYJ1lhRuSoGDqokdUxkI71NyEE2Ook5ngVTEZTQyXRId43nAcAg+WJFe5TN5GKPZ4AfxxuqR0isFMVIpRy78QQ3KVu6duwodYfcXG2JLOSLSSjBXLzGSaP57iGt0qfFK7ZxYZYd2h/b+zQenMwahlArYHZDiBQ==
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: restart sshd service to enable ssh pub key
+      service:
+        name: sshd
+        state: restarted
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
