@@ -21,7 +21,7 @@ class Getmyip:
         str=requests.get(url).text
         return re.search('\d+\.\d+\.\d+\.\d+',str).group(0)
     def ip_record(self,pub_ip):
-        myfile = open('/opt/WORK/Cloud_script/pub_ip', 'w+')
+        myfile = open('/opt/WORK/Cloud_scripts/pub_ip', 'w+')
         myfile.write(pub_ip)
         myfile.write("\n")
         myfile.close()
@@ -35,14 +35,14 @@ print pub_ip
 #getmyip.ip_record(pub_ip)
 
 # get origin pub IP
-fr=open("/opt/WORK/Cloud_script/pub_ip",'r')
+fr=open("/opt/WORK/Cloud_scripts/pub_ip",'r')
 content=fr.readlines()
 origin_ip = content[0]
 print origin_ip
 fr.close()
 
 # get aliyun access information
-FILE_PATH="/opt/WORK/Cloud_script/Aliyun/"
+FILE_PATH="/opt/WORK/Cloud_scripts/Aliyun/"
 fr=open(FILE_PATH+'Access_Information','r')
 content=fr.readlines()
 ## -1 mean remove "\n" from the element

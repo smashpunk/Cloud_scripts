@@ -109,19 +109,13 @@ def describe_instances(instance_id,accesskey_id, accesskey_secret, region_id):
 
 def generate_inventory(InstanceName,PublicIpAddress):
     # write ansible inventory file
-    myfile = open('/opt/WORK/Cloud_script/Ansible/inventory', 'a+')
+    myfile = open('/opt/WORK/Cloud_scripts/Ansible/inventory', 'a+')
     myfile.write("\n")
     myfile.write("["+InstanceName+"]" + "\n")
     myfile.write(PublicIpAddress + "\n")
     myfile.write("\n")
     myfile.close()
-    # write prometheus configuration file
-    #myfile = open('/opt/WORK/Cloud_script/Packages/prometheus.yml', 'a+')
-    #myfile.write("  - job_name: \"" + InstanceName + "\"" + "\n")
-    #myfile.write("    static_configs:\n")
-    #myfile.write("      - targets: ['"+PublicIpAddress + ":9100']""\n")
-    #myfile.close()
-    myfile = open('/opt/WORK/Cloud_script/Ansible/prometheus_new_job', 'a+')
+    myfile = open('/opt/WORK/Cloud_scripts/Ansible/prometheus_new_job', 'a+')
     myfile.write("  - job_name: \"" + InstanceName + "\"" + "\n")
     myfile.write("    static_configs:\n")
     myfile.write("      - targets: ['"+PublicIpAddress + ":9100']""\n")

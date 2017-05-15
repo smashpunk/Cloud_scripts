@@ -13,7 +13,7 @@ from aliyunsdkecs.request.v20140526 import CreateVSwitchRequest
 
 from Infra_function import *
 
-FILE_PATH="/opt/WORK/Cloud_script/Aliyun/"
+FILE_PATH="/opt/WORK/Cloud_scripts/Aliyun/"
 
 ## read AccessKeyID and AccessKeySecret from file
 fr=open(FILE_PATH+'Access_Information','r')
