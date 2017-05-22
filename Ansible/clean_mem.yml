@@ -4,6 +4,6 @@
   remote_user: root
   tasks:
     - name: Clean Tomcat host cached memeory
-      shell: syc;echo 1 > /proc/sys/vm/drop_caches
+      shell: sync;echo 1 > /proc/sys/vm/drop_caches
       when: ansible_nodename == "tomcat1" or
             ansible_nodename == "tomcat2"
