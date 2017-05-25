@@ -27,3 +27,7 @@
         name: screen
         state: present
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: install iotop tools
+      yum:
+        name: iotop
+        state: present
