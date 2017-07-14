@@ -15,6 +15,9 @@
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
     - name: copy crt to destination
       copy:
-        src: "/opt/WORK/Cloud_script/Packages/domain.crt"
+        src: "/opt/WORK/Cloud_scripts/Packages/domain.crt"
         dest: "/etc/docker/certs.d/registry.dida100.cn:5000/ca.crt"
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: enable and start docker daemon
+      shell: systemctl enable docker && systemctl start docker
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"

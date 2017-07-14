@@ -60,7 +60,7 @@ def create_instance(zone_id,accesskey_id,accesskey_secret,region_id="cn-hangzhou
     request.set_InternetMaxBandwidthOut('100')
     request.set_InstanceChargeType(instance_charge)
     request.set_SystemDiskCategory('cloud_efficiency')
-    request.set_SystemDiskSize('40')
+    request.set_SystemDiskSize('400')
     vpc_id=describe_switch(accesskey_id, accesskey_secret, region_id)
     switch_id=raw_input("Please select the vSwitch_ID:")
     request.set_VSwitchId(switch_id)

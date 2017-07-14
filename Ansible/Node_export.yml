@@ -5,22 +5,23 @@
   tasks:
     - name: upload node exporter
       copy:
-        src: "/opt/WORK/Cloud_script/Packages/node_exporter-0.13.0.linux-amd64.tar.gz"
+        src: "/opt/WORK/Cloud_scripts/Packages/node_exporter-0.13.0.linux-amd64.tar.gz"
         dest: "/opt/"
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
     - name: unzip node exporter
       unarchive:
         src: "/opt/node_exporter-0.13.0.linux-amd64.tar.gz"
         dest: "/opt/"
-        copy: False
-        remote_src: True
+        #copy: False
+        remote_src: yes
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
     - name: create node exporter service
       copy:
-        src: "/opt/WORK/Cloud_script/Packages/node_exporter.service"
+        src: "/opt/WORK/Cloud_scripts/Packages/node_exporter.service"
         dest: "/etc/systemd/system/"
         mode: 755
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
     - name: enable node exporter
       shell: systemctl enable node_exporter && systemctl start node_exporter
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+

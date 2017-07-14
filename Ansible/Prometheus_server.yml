@@ -10,7 +10,7 @@
          mode: 0755
      - name: upload new job file
        copy:
-         src: "/opt/WORK/Cloud_script/Ansible/prometheus_new_job"
+         src: "/opt/WORK/Cloud_scripts/Ansible/prometheus_new_job"
          dest: "/opt/prometheus.d/prometheus_new_job"
      - name: copy current job file to destination folder
        copy:
@@ -33,4 +33,4 @@
          path: /opt/prometheus.d/
          state: absent
      - name: clean local prometheus new job file
-       local_action: shell rm -f /opt/WORK/Cloud_script/Ansible/prometheus_new_job
+       local_action: shell rm -f /opt/WORK/Cloud_scripts/Ansible/prometheus_new_job
