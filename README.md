@@ -1,4 +1,4 @@
-# 共有云自动化以及Kubernetes部署PV,PVC,Service,Deployment
+# 云自动化以及Kubernetes部署PV,PVC,Service,Deployment
 ## 前提: `bash`, `python 2`, `Aliyun SDK`, `ansible`  
 
 ## 目的: 提供对阿里云的自动化管理工具 
