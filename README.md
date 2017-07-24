@@ -1,5 +1,5 @@
 # Cloud_scripts
-Reqiurment: bash, python 2, Aliyun SDK, ansible
+Reqiurment: `bash`, `python 2`, `Aliyun SDK`, `ansible`
 目的: 提供对阿里云的自动化管理工具
 类型： Aliyun  --> 针对阿里云资源，主要对象是ECS,安全组
        Ansible --> 提供Ansible脚本
