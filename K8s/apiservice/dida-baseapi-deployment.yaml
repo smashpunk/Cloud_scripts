@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: base-api
+  namespace: apiservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: base-api
+    spec:
+      containers:
+      - name: base-api
+        image: registry.dida100.cn:5000/dida-api-base
+        env:
+        - name: JAVA_OPTS
+          value: "-Dspring.profiles.active=docker"
+        ports:
+        - containerPort: 25200
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "1024M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: apiservice-log
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: apiservice-log
+        persistentVolumeClaim:
+          claimName: apiservice-log
+      restartPolicy: Always

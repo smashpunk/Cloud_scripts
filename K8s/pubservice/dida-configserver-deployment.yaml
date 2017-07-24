@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: config-svr
+  namespace: pubservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: config-svr
+    spec:
+      containers:
+      - name: dida-config-server
+        image: registry.dida100.cn:5000/dida-config-server
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "test"
+        ports:
+        - containerPort: 8888
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "1024M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: nfs-log
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: nfs-log
+        persistentVolumeClaim:
+          claimName: nfs-log
+      restartPolicy: Always

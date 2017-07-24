@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-svr
+  namespace: pubservice
+spec:
+  selector:
+    app: config-svr
+  ports:
+    - name: port8888
+      protocol: TCP
+      port: 8888
+      targetPort: 8888
+  type: NodePort
