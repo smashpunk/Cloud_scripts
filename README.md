@@ -1,13 +1,14 @@
-# 云自动化以及Kubernetes部署PV,PVC,Service,Deployment
-## 前提: `bash`, `python 2`, `Aliyun SDK`, `ansible`  
+# Cloud automation && Implement Kubernetes with PV,PVC,Service,Deployment
+## Pre-Condition: `bash`, `python 2`, `Aliyun SDK`, `ansible`  
 
-## 目的: 提供对阿里云的自动化管理工具 
+## Target: Automation Tool for Ops 
  
-## 分类说明： 
+## Description： 
 
-             Aliyun  --> 针对阿里云资源，主要对象是ECS,安全组
-             Ansible --> 提供Ansible脚本  
-             K8s     --> 针对Kubernetes，提供PV,PVC,Service,Deployment  
-             Package --> 提供特定工具    
-
-## 联系方式：[瞿盛熙](https://www.linkedin.com/in/shengxi-qu-21920564/)
+             Aliyun  --> Aliyun Ops python scripts，main scopes are: ECS,safegroup
+             Ansible --> Ansible Ops scripts  
+             Docker  --> Dockerfile
+             K8s     --> Kubernetes，with PV,PVC,Service,Deployment  
+             Package --> Specail version sw that scripts needed    
+             
+## 联系方式：[Qu Shengxi](https://www.linkedin.com/in/shengxi-qu-21920564/)
