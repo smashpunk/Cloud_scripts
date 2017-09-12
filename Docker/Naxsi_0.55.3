@@ -1,0 +1,24 @@
+FROM ubuntu:16.04
+LABEL maintainer="Qu Shengxi"
+RUN mkdir /opt/naxsi/
+RUN apt-get update -qq
+RUN apt-get install -qy openssl libssl-dev wget unzip apt-utils build-essential autoconf
+RUN wget -P /opt/naxsi/ https://nchc.dl.sourceforge.net/project/pcre/pcre/8.41/pcre-8.41.tar.gz
+RUN wget -P /opt/naxsi/ https://github.com/nbs-system/naxsi/archive/master.zip
+RUN wget -P /opt/naxsi/ http://nginx.org/download/nginx-1.12.1.tar.gz
+RUN tar xvzf /opt/naxsi/pcre-8.41.tar.gz -C /opt/naxsi/
+RUN unzip /opt/naxsi/master.zip -d /opt/naxsi/
+RUN tar xvzf /opt/naxsi/nginx-1.12.1.tar.gz -C /opt/naxsi/
+RUN /opt/naxsi/pcre-8.41/configure
+RUN cd /opt/naxsi/pcre-8.41/
+RUN make
+RUN make install
+WORKDIR /opt/naxsi/nginx-1.12.1/
+RUN ./configure --add-module=/opt/naxsi/naxsi-master/naxsi_src/ --with-pcre=/opt/naxsi/pcre-8.41
+RUN make
+RUN make install
+RUN ln -sf /dev/stdout /usr/local/nginx/logs/access.log \
+        && ln -sf /dev/stderr /usr/local/nginx/logs/error.log
+EXPOSE 80
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
