@@ -32,18 +32,3 @@
         name: iotop
         state: present
       when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
-    - name: prepare TCP_BBR, change kernel
-      shell: rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org && rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm && yum --enablerepo=elrepo-kernel install kernel-ml -y
-      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
-    - name: prepare TCP_BBR, change grub
-      shell: egrep ^menuentry /etc/grub2.cfg | cut -f 2 -d \' && grub2-set-default 0 && reboot
-      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
-    - name: pause 30s for boot up
-      pause:
-        seconds: 30
-    - name: prepare TCP_BBR, setup BBR
-      shell: modprobe tcp_bbr && echo "tcp_bbr" >> /etc/modules-load.d/modules.conf && echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf && echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
-      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
-    - name: prepare TCP_BBR, enable BBR
-      shell: sysctl -p
-      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"

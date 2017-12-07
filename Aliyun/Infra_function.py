@@ -34,7 +34,7 @@ def create_vpc(vpc_name,accesskey_id,accesskey_secret,region_id="cn-hangzhou"):
     request.set_VpcName(vpc_name)
     request.set_CidrBlock('10.64.0.0/16')
     request.set_Description(vpc_name)
-    result=clt.do_action(request)
+    result=clt.do_action_with_exception(request)
     #print result
     js_str=json.loads(result)
     return js_str["VpcId"]
@@ -44,7 +44,7 @@ def describe_vpc(accesskey_id,accesskey_secret,region_id="cn-hangzhou"):
     clt=client.AcsClient(accesskey_id, accesskey_secret, region_id)
     request=DescribeVpcsRequest.DescribeVpcsRequest()
     request.set_accept_format('json')
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     js_str=json.loads(result)
     print("the VPC list is is below, for your reference!")
     for i in js_str["Vpcs"]["Vpc"]:
@@ -61,7 +61,7 @@ def create_swtich(zone_id,vpc_id,accesskey_id,accesskey_secret,region_id):
     request.set_ZoneId(zone_id)
     request.set_CidrBlock(cidr_block)
     request.set_VSwitchName(switch_name)
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     print result
     return
 
@@ -72,7 +72,7 @@ def describe_switch(accesskey_id,accesskey_secret,region_id):
     request=DescribeVSwitchesRequest.DescribeVSwitchesRequest()
     request.set_VpcId(vpc_id)
     request.set_accept_format('json')
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     js_str=json.loads(result)
     for i in js_str["VSwitches"]["VSwitch"]:
         print i["VSwitchName"],i["VSwitchId"],i["CidrBlock"],i["ZoneId"]
@@ -87,10 +87,10 @@ def create_sg(vpc_id,accesskey_id,accesskey_secret,region_id):
     print("Which kind of safe group do you prefer, Classic or VPC?")
     selection=upper(raw_input("(C)lassic/(V)PC:"))
     if selection == "C":
-        result=clt.do_action(request)
+        result=clt.do_action_with_exception(request)
     elif selection == "V":
         request.set_VpcId(vpc_id)
-        result=clt.do_action(request)
+        result=clt.do_action_with_exception(request)
     else:
         print("Please input C for classic Or V for vpc!")
     js_str=json.loads(result)
@@ -103,7 +103,7 @@ def describe_sg(vpc_id,accesskey_id,accesskey_secret,region_id):
     request= DescribeSecurityGroupsRequest.DescribeSecurityGroupsRequest()
     request.set_accept_format('json')
     request.set_VpcId(vpc_id)
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     js_str=json.loads(result)
     for i in js_str["SecurityGroups"]["SecurityGroup"]:
         print i["SecurityGroupId"],"\t",i["SecurityGroupName"],"\t",i["Description"],"\t",i["CreationTime"]
@@ -133,7 +133,7 @@ def create_sg_policy(sg_id,accesskey_id,accesskey_secret,region_id):
             request.set_Policy(policy)
         request.set_accept_format('json')
         request.set_Priority('10')
-        result = clt.do_action(request)
+        result = clt.do_action_with_exception(request)
         print("Do you want to create a new policy?")
         selection=upper(raw_input("Y/N:"))
         ## judge if the loop can be processed
@@ -155,7 +155,7 @@ def modify_sg_policy(sg_id,accesskey_id,accesskey_secret,region_id):
         request.set_IpProtocol(ip_protocal)
         request.set_PortRange(port_range)
         request.set_SourceCidrIp(source_cidr)
-        result=clt.do_action(request)
+        result=clt.do_action_with_exception(request)
         print result
         print("Do you want to create a new policy?")
         selection=upper(raw_input("Y/N:"))
@@ -173,7 +173,7 @@ def describe_sg_policy(sg_id,accesskey_id,accesskey_secret,region_id):
     request=DescribeSecurityGroupAttributeRequest.DescribeSecurityGroupAttributeRequest()
     request.set_accept_format('json')
     request.set_SecurityGroupId(sg_id)
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     js_str=json.loads(result)
     print "SourceCidrIp    "+"DestCidrIp    "+"Direction    "+"PortRange    "+"IpProtocol    "+"Policy"
     for i in js_str["Permissions"]["Permission"]:
@@ -186,7 +186,7 @@ def show_zoneid(accesskey_id,accesskey_secret,region_id):
     clt = client.AcsClient(accesskey_id, accesskey_secret, region_id)
     request=DescribeZonesRequest.DescribeZonesRequest()
     request.set_accept_format('json')
-    result=clt.do_action(request)
+    result=clt.do_action_with_exception(request)
     menu = {}
     index = 0
     js_str = json.loads(result)
@@ -218,7 +218,7 @@ def create_sg_default_policy(sg_id,accesskey_id,accesskey_secret,region_id):
     request.set_SourceCidrIp("116.62.17.198")
     request.set_Policy("accept")
     request.set_Priority('10')
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     print "prometheus server has been added into new created SafeGroup!"
     print result
 
@@ -231,7 +231,7 @@ def create_sg_default_policy(sg_id,accesskey_id,accesskey_secret,region_id):
     request.set_SourceCidrIp("222.45.44.102")
     request.set_Policy("accept")
     request.set_Priority('10')
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception_with_exception(request)
     print "DiDa Office Unicom IP segement has been added into new created SafeGroup!"
     print result
 
@@ -244,7 +244,7 @@ def create_sg_default_policy(sg_id,accesskey_id,accesskey_secret,region_id):
     request.set_SourceCidrIp("222.190.106.80/28")
     request.set_Policy("accept")
     request.set_Priority('10')
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception_with_exception(request)
     print "DiDa Office IP telcome segement has been added into new created SafeGroup!"
     print result
 

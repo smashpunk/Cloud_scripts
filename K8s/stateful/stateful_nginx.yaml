@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: test
+  labels:
+    app: nginx
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: nginx
+---
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: web
+  namespace: test
+spec:
+  selector:
+    matchLabels:
+      app: nginx # has to match .spec.template.metadata.labels
+  serviceName: "nginx"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: nginx # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: nginx
+        image: gcr.io/google_containers/nginx-slim:0.8
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes:
+        - ReadWriteMany
+      storageClassName: ""
+      selector:
+        matchLabels:
+          usage: "statefulset"
+          # since not using GCE, but nfs. admin should create pv in advance, with the lable upon. number of pv shall be the same as replicas
+      resources:
+        requests:
+          storage: 1Gi

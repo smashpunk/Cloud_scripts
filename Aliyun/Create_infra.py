@@ -23,7 +23,25 @@ accesskey_id=content[1][12:-1]
 accesskey_secret=content[2][16:-1]
 region_id_default=content[3][14:-1]
 fr.close()
-
+region_info = {
+    "青岛": "cn-qingdao",
+    "北京": "cn-beijing",
+    "杭州": "cn-hangzhou",
+    "上海": "cn-shanghai",
+    "深圳": "cn-shenzhen",
+    "香港": "cn-hongkong",
+    "新加坡": "ap-southeast-1",
+    "悉尼": "ap-southeast-2",
+    "东京": "ap-northeast-1",
+    "硅谷": "us-west-1",
+    "弗吉尼亚": "us-east-1",
+    "法兰克福": "eu-central-1",
+    "迪拜": "me-east-1"
+}
+print("Below is the region information, pls check at https://help.aliyun.com/document_detail/53289.html?spm=5176.product29991.6.587.WTfHZW&parentId=29991 ")
+for region in region_info:
+    print region + ":" + region_info[region]
+print("The default region is 杭州: cn-hangzhou")
 print("Do you want to create a new VPC?")
 vpc_selection=upper(raw_input("Y/N:"))
 if vpc_selection == "Y":

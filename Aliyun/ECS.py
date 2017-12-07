@@ -28,7 +28,7 @@ def describe_instance_type(accesskey_id,accesskey_secret,region_id="cn-hangzhou"
     clt = client.AcsClient(accesskey_id, accesskey_secret, region_id)
     request=DescribeInstanceTypesRequest.DescribeInstanceTypesRequest()
     request.set_accept_format('json')
-    result=clt.do_action(request)
+    result=clt.do_action_with_exception(request)
     js_str=json.loads(result)
     print "Type        " + "CPU(core)    " + "Memory(GB)    "
     for i in js_str["InstanceTypes"]["InstanceType"]:
@@ -54,10 +54,11 @@ def create_instance(zone_id,accesskey_id,accesskey_secret,region_id="cn-hangzhou
         instance_charge=raw_input("Please input correct pay charge type: PrePaid or PostPaid")
     elif instance_charge == "PrePaid":
         request.set_Period("1")
+    hdd_size = raw_input("Please input the HDD size,default is 400G:")
     request.set_InstanceName(instance_name)
     request.set_Description(instance_description)
     request.set_InternetChargeType('PayByTraffic')
-    request.set_InternetMaxBandwidthOut('100')
+    request.set_InternetMaxBandwidthOut(hdd_size)
     request.set_InstanceChargeType(instance_charge)
     request.set_SystemDiskCategory('cloud_efficiency')
     request.set_SystemDiskSize('400')
@@ -78,7 +79,7 @@ def create_instance_ip(instance_id,accesskey_id,accesskey_secret,region_id):
     request=AllocatePublicIpAddressRequest.AllocatePublicIpAddressRequest()
     request.set_accept_format('json')
     request.set_InstanceId(instance_id)
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     js_str=json.loads(result)
     print result
     print ("The public IP assigned to the ECS is "+js_str["IpAddress"])
@@ -91,7 +92,7 @@ def boot_instance(instance_id,accesskey_id,accesskey_secret,region_id):
     request=StartInstanceRequest.StartInstanceRequest()
     request.set_accept_format('json')
     request.set_InstanceId(instance_id)
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     print result
     return
 
@@ -100,7 +101,7 @@ def describe_instances(instance_id,accesskey_id, accesskey_secret, region_id):
     request=DescribeInstancesRequest.DescribeInstancesRequest()
     request.set_accept_format('json')
     request.set_InstanceIds(instance_id)
-    result = clt.do_action(request)
+    result = clt.do_action_with_exception(request)
     js_str = json.loads(result)
     InstanceName=js_str["Instances"]["Instance"][0]["InstanceName"]
     PublicIpAddress=js_str["Instances"]["Instance"][0]["PublicIpAddress"]["IpAddress"][0]

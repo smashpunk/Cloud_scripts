@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: statefulset
+  labels:
+    type: nfs
+    usage: statefulset
+spec:
+  capacity:
+    storage: 50G
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  nfs:
+    server: *.nas.aliyuncs.com
+    path: "/test"
