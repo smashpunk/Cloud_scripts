@@ -1,5 +1,5 @@
 [qushengxi]
-AccessKeyID:LTAIFLs7Rhb3fhDY
-AccessKeySecret:xWOq2UtrnIL8Vxx7c7aKKLG6NXUJ2R
+AccessKeyID:Your ID
+AccessKeySecret:Your Key
 DefaultRegion:cn-hangzhou
 [currently, only one user's access information can be used for calling API]
