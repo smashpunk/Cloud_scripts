@@ -1,0 +1,8 @@
+---
+- name: Kuberentets cluster Ops
+  remote_user: root
+  hosts: all
+  tasks:
+    - name: backup ETCD DB
+      shell: date_time=`date +%Y%m%d` && etcdctl backup --data-dir /var/lib/etcd/ --backup-dir /mnt/nfs01/etcd_backup/${date_time}
+      when: ansible_nodename == "iZbp14asog2ej2l4agztsgZ"

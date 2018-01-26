@@ -1,0 +1,22 @@
+---
+- name: Add access uers
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: install tools
+      shell: yum install python-setuptools && easy_install pip
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: install git
+      yum:
+        name: git
+        state: present
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: install ss
+      shell: pip install git+https://github.com/shadowsocks/shadowsocks.git@master
+    - name: copy ss.json to /etc/
+      copy:
+        src: "/opt/WORK/Cloud_scripts/Packages/ss.json"
+        dest: "/etc/ss.json"
+      when: ansible_nodename != "iZbp17dp6g4m63xlrqb41xZ"
+    - name: start ss
+      shell: sserver -c /etc/ss.json -d start

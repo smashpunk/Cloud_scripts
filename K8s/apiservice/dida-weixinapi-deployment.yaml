@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: weixin-api
+  namespace: apiservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: weixin-api
+    spec:
+      containers:
+      - name: weixin-api
+        image: registry.dida100.cn:5000/dida-weixin-api
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker"
+        ports:
+        - containerPort: 25400
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "1024M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: apiservice-log
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: apiservice-log
+        persistentVolumeClaim:
+          claimName: apiservice-log
+      restartPolicy: Always

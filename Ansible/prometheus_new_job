@@ -1,0 +1,3 @@
+  - job_name: "Test_dbPerformance"
+    static_configs:
+      - targets: ['47.96.145.71:9100']

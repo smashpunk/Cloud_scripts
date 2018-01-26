@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: msg-center-api
+  namespace: pubservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: msg-center-api
+    spec:
+      containers:
+      - name: msg-center-api
+        image: registry.dida100.cn:5000/msg-center-api
+        env:
+        - name: JAVA_OPTS
+          value: "-Dspring.profiles.active=docker"
+        ports:
+        - containerPort: 25100
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "1024M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: nfs-log
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: nfs-log
+        persistentVolumeClaim:
+          claimName: nfs-log
+      restartPolicy: Always

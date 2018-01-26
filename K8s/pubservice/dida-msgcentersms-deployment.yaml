@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: msg-center-sms
+  namespace: pubservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: msg-center-sms
+    spec:
+      containers:
+      - name: msg-center-sms
+        image: registry.dida100.cn:5000/msg-center-support-sms
+        env:
+        - name: JAVA_OPTS
+          value: "-Dspring.profiles.active=docker"
+        ports:
+        - containerPort: 25101
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "1024M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: nfs-log
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: nfs-log
+        persistentVolumeClaim:
+          claimName: nfs-log
+      restartPolicy: Always

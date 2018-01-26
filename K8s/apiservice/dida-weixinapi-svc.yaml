@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weixin-api
+  namespace: apiservice
+spec:
+  selector:
+    app: weixin-api
+  ports:
+    - name: port25400
+      protocol: TCP
+      port: 25400
+      targetPort: 25400
+  type: NodePort

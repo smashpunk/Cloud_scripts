@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: applog-svr
+  namespace: pubservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: applog-svr
+    spec:
+      containers:
+      - name: dida-applog
+        image: registry.dida100.cn:5000/dida-applog
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "500M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: nfs-log
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: nfs-log
+        persistentVolumeClaim:
+          claimName: nfs-log
+      restartPolicy: Always

@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dida-api
+  namespace: apiservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dida-api
+    spec:
+      containers:
+      - name: dida-api
+        image: registry.dida100.cn:5000/dida-api
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker"
+        ports:
+        - containerPort: 25000
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "1700M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: apiservice-log
+        imagePullPolicy: Always
+      volumes:
+      - name: apiservice-log
+        persistentVolumeClaim:
+          claimName: apiservice-log
+      restartPolicy: Always

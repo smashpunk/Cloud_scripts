@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: es-node
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: es-node
+    spec:
+      containers:
+      - name: elasticsearch
+        image: registry.dida100.cn:5000/elasticsearch:2.4.3
+        ports:
+        - containerPort: 9200
+        - containerPort: 9300
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1024M"
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          name: es-config
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: es-config
+        hostPath: 
+          path: /etc/elasticsearch/conf.d/elasticsearch_node.yml
+      restartPolicy: Always

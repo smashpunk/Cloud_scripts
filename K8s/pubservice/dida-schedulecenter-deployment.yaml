@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: schedule-center
+  namespace: pubservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: schedule-center
+    spec:
+      containers:
+      - name: dida-schedule-center
+        image: registry.dida100.cn:5000/dida-schedule-center
+        env:
+        - name: JAVA_OPTS
+          value: "-Dspring.profiles.active=docker"
+        ports:
+        - containerPort: 25300
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "1024M"
+        volumeMounts:
+        - mountPath: /tmp/logs/
+          name: nfs-log
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: nfs-log
+        persistentVolumeClaim:
+          claimName: nfs-log
+      restartPolicy: Always

@@ -2,14 +2,18 @@
 - name: QuShengxi's cookbook
   hosts: all
   tasks:
-- include: K8s_etcd_backup.yml
+#- include: K8s_etcd_backup.yml
 #- include: Java_install.yml
-#- include: OS_initial.yml
-#- include: Access_control.yml
-- include: Node_export.yml
+- include: OS_initial.yml
+- include: Access_control.yml
+#- include: Node_export.yml
 #- include: Prometheus_server.yml
 #- include: Docker.yml
 #- include: clean_mem.yml
+#- include: K8s_slave.yml
+#- include: Security.yml
+#- include: GFW.yml
+#- include: TCP_BBR.yml
 #  roles:
 #  - {role: Qu_roles}
 

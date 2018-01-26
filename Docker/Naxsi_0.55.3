@@ -2,10 +2,11 @@ FROM ubuntu:16.04
 LABEL maintainer="Qu Shengxi"
 RUN mkdir /opt/naxsi/
 RUN apt-get update -qq
-RUN apt-get install -qy openssl libssl-dev wget unzip apt-utils build-essential autoconf
+RUN apt-get install -qy openssl libssl-dev wget unzip apt-utils build-essential autoconf apt-transport-https libgeoip-dev
 RUN wget -P /opt/naxsi/ https://nchc.dl.sourceforge.net/project/pcre/pcre/8.41/pcre-8.41.tar.gz
 RUN wget -P /opt/naxsi/ https://github.com/nbs-system/naxsi/archive/master.zip
 RUN wget -P /opt/naxsi/ http://nginx.org/download/nginx-1.12.1.tar.gz
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 RUN tar xvzf /opt/naxsi/pcre-8.41.tar.gz -C /opt/naxsi/
 RUN unzip /opt/naxsi/master.zip -d /opt/naxsi/
 RUN tar xvzf /opt/naxsi/nginx-1.12.1.tar.gz -C /opt/naxsi/
@@ -14,11 +15,19 @@ RUN cd /opt/naxsi/pcre-8.41/
 RUN make
 RUN make install
 WORKDIR /opt/naxsi/nginx-1.12.1/
-RUN ./configure --add-module=/opt/naxsi/naxsi-master/naxsi_src/ --with-pcre=/opt/naxsi/pcre-8.41
+RUN ./configure --add-module=/opt/naxsi/naxsi-master/naxsi_src/ --with-pcre=/opt/naxsi/pcre-8.41 --with-http_geoip_module
 RUN make
 RUN make install
-RUN ln -sf /dev/stdout /usr/local/nginx/logs/access.log \
-        && ln -sf /dev/stderr /usr/local/nginx/logs/error.log
+## remove below ln , in order to use filebeat
+#RUN ln -sf /dev/stdout /usr/local/nginx/logs/access.log \
+#        && ln -sf /dev/stderr /usr/local/nginx/logs/error.log
+RUN echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-5.x.list
+RUN apt-get update && apt-get install filebeat
+RUN update-rc.d filebeat defaults 95 10
+## add nginx.conf
+ADD nginx.conf /usr/local/nginx/conf/
+## add filebeat.yml
+ADD filebeat.yml /etc/filebeat/
 EXPOSE 80
 STOPSIGNAL SIGTERM
 ENTRYPOINT ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]

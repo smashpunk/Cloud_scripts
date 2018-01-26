@@ -1,0 +1,13 @@
+---
+- name: security patch
+  hosts: all
+  remote_user: root
+  tasks:
+#    - name: CVE-2016-1248,CVE-2016-0718
+#      yum:
+#        name: vim, vim-minimal, expat
+#        state: latest
+    - name: yum update
+      yum:
+        name: '*'
+        state: latest

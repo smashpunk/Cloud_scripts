@@ -12,5 +12,5 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Recycle
   nfs:
-    server: *.nas.aliyuncs.com
+    server: 04e234a407-inm10.cn-hangzhou.nas.aliyuncs.com
     path: "/pubservice"
