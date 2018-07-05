@@ -2,8 +2,8 @@
 
 from ECS import *
 
-FILE_PATH="/opt/WORK/Cloud_scripts/Aliyun/"
-
+#FILE_PATH="/opt/WORK/Cloud_scripts/Aliyun/"
+FILE_PATH="C:\Users\Qu\Desktop\Cloud_Test\Cloud_scripts\Aliyun\/"
 ## read AccessKeyID and AccessKeySecret from file
 fr=open(FILE_PATH+'Access_Information','r')
 content=fr.readlines()
@@ -36,8 +36,9 @@ region_id=raw_input("Please select ECS's region:")
 zone_id=show_zoneid(accesskey_id,accesskey_secret,region_id)
 account=int(raw_input("How many ECS instance do you want to create?"))
 index=1
+AMI=raw_input("Please input the Image ID:")
 while (index <= account):
-    instance_id = create_instance(zone_id,accesskey_id,accesskey_secret,region_id)
+    instance_id = create_instance(zone_id,accesskey_id,accesskey_secret,region_id,AMI)
     print("Pause 10s for instance be ready by Aliyun!")
     time.sleep(10)
     create_instance_ip(instance_id,accesskey_id,accesskey_secret,region_id)

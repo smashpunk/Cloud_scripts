@@ -36,12 +36,12 @@ def describe_instance_type(accesskey_id,accesskey_secret,region_id="cn-hangzhou"
             print i["InstanceTypeId"],"\t    ",i["CpuCoreCount"],"\t    ",i["MemorySize"]
     return
 
-def create_instance(zone_id,accesskey_id,accesskey_secret,region_id="cn-hangzhou"):
+def create_instance(zone_id,accesskey_id,accesskey_secret,region_id,image_ID):
     clt = client.AcsClient(accesskey_id, accesskey_secret, region_id)
     request=CreateInstanceRequest.CreateInstanceRequest()
     request.set_accept_format('json')
     request.set_ZoneId(zone_id)
-    request.set_ImageId('m-bp11yajhh9duk89wd43n')
+    request.set_ImageId(image_ID)
     describe_instance_type(accesskey_id,accesskey_secret,region_id)
     intance_type=raw_input("Please select ECS instance type:")
     request.set_InstanceType(intance_type)
@@ -54,14 +54,19 @@ def create_instance(zone_id,accesskey_id,accesskey_secret,region_id="cn-hangzhou
         instance_charge=raw_input("Please input correct pay charge type: PrePaid or PostPaid")
     elif instance_charge == "PrePaid":
         request.set_Period("1")
-    hdd_size = raw_input("Please input the HDD size,default is 400G:")
+    sys_hdd_size = raw_input("Please input the system driver size,default is 400G:")
+    print("Do you want to add a DATA DISK?")
+    disk_choice = raw_input("y/n:")
+    if disk_choice in ['y', 'Y']:
+        data_hdd_size = raw_input("Please input the data driver size,default is 400G:")
     request.set_InstanceName(instance_name)
     request.set_Description(instance_description)
     request.set_InternetChargeType('PayByTraffic')
     request.set_InternetMaxBandwidthOut('100')
     request.set_InstanceChargeType(instance_charge)
     request.set_SystemDiskCategory('cloud_efficiency')
-    request.set_SystemDiskSize(hdd_size)
+    request.set_SystemDiskSize(sys_hdd_size)
+    request.set_DataDisks(({'DataDisk': '1'}, {'Size': data_hdd_size}, {'Category': 'cloud_efficiency'}))
     vpc_id=describe_switch(accesskey_id, accesskey_secret, region_id)
     switch_id=raw_input("Please select the vSwitch_ID:")
     request.set_VSwitchId(switch_id)
@@ -105,7 +110,8 @@ def describe_instances(instance_id,accesskey_id, accesskey_secret, region_id):
     js_str = json.loads(result)
     InstanceName=js_str["Instances"]["Instance"][0]["InstanceName"]
     PublicIpAddress=js_str["Instances"]["Instance"][0]["PublicIpAddress"]["IpAddress"][0]
-    generate_inventory(InstanceName,PublicIpAddress)
+##  temp disable inventory generate
+#    generate_inventory(InstanceName,PublicIpAddress)
     return
 
 def generate_inventory(InstanceName,PublicIpAddress):
